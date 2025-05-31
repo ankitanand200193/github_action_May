@@ -25,7 +25,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
       - name: Run Tests
         run: |
           pip install pytest
@@ -40,6 +39,12 @@ jobs:
           script: |
             sudo apt update -y
             sudo apt install -y git python3 python3-pip python3-venv tmux
+
+
+            # Pass GitHub environment variables manually
+            export GITHUB_EVENT_NAME="${{ github.event_name }}"
+            export GITHUB_REF="${{ github.ref }}"
+
 
             # Pass GitHub environment variables manually
             export GITHUB_EVENT_NAME="${{ github.event_name }}"
@@ -80,6 +85,9 @@ jobs:
             source $VENV_DIR/bin/activate
             pip install --upgrade pip
             pip install -r requirements.txt
+
+            # Kill any process on port 5000 (optional safety)
+            sudo lsof -ti:5000 | xargs -r sudo kill -9
 
             # Kill any process on port 5000 (optional safety)
             sudo lsof -ti:5000 | xargs -r sudo kill -9
