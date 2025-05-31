@@ -85,7 +85,7 @@ git push origin staging
 
 → Automatically runs tests and deploys to EC2 using `staging` branch.
 
-### EC2 staging git logs match with the pipeline
+### EC2 staging Github logs match with the pipeline
   
   ![gitlog](Screenshots/gitlog_ec2.png)
 
@@ -102,7 +102,7 @@ Go to GitHub → Releases → **Draft a new release**
 
 → Deploys production-ready code from `main` branch to EC2.
 
-  ### EC2 main git logs
+  ### EC2 main Github logs
 
    ![gitlog](Screenshots/gitlog_ec2_main.png)
 
