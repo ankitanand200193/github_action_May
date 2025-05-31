@@ -46,7 +46,9 @@ jobs:
             source venv/bin/activate
             pip install --upgrade pip
             pip install -r requirements.txt
-            pkill -f app.py || true  # optional: stop previous run
-            MONGO_URI="${{ secrets.MONGO_URI }}" nohup venv/bin/python3 app.py > out.log 2>&1 &
+            pkill -f app.py || true  # kill any running Flask app
+            echo "Starting Flask app in background with MONGO_URI"
+            nohup bash -c "MONGO_URI='${{ secrets.MONGO_URI }}' venv/bin/python3 app.py" > flask.log 2>&1 &
+
 
       
