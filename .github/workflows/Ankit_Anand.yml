@@ -44,15 +44,27 @@ jobs:
             REPO_DIR="/home/ubuntu/my-flask-app"
             REPO_URL="https://github.com/ankitanand200193/github_action_May.git"
             VENV_DIR="$REPO_DIR/venv"
-          
-            # Clone or pull
-            if [ -d "$REPO_DIR" ]; then
-              cd $REPO_DIR
-              git pull
+            
+            # Set branch based on GitHub Actions environment variables
+            if [ "$GITHUB_EVENT_NAME" == "release" ]; then
+              BRANCH="main"
+            elif [ "$GITHUB_EVENT_NAME" == "push" ] && [[ "$GITHUB_REF" == "refs/heads/staging" ]]; then
+              BRANCH="staging"
             else
-              git clone $REPO_URL $REPO_DIR
+              echo "This script only runs for release events or pushes to the staging branch."
+              exit 1
+            fi
+            
+            # Clone or pull
+            if [ -d "$REPO_DIR/.git" ]; then
+              cd $REPO_DIR
+              git checkout $BRANCH
+              git pull origin $BRANCH
+            else
+              git clone --branch $BRANCH $REPO_URL $REPO_DIR
               cd $REPO_DIR
             fi
+
             
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
             
