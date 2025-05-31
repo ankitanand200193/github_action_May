@@ -26,8 +26,10 @@ This pipeline runs under two triggers:
 * **On Push to `staging` branch:**
   Pulls the latest `staging` code and deploys it to EC2.
 
+
 * **On Release Creation (GitHub Releases):**
   Pulls the `main` branch and deploys it to EC2.
+
 
 ### GitHub Actions Steps
 
@@ -83,6 +85,14 @@ git push origin staging
 
 → Automatically runs tests and deploys to EC2 using `staging` branch.
 
+### EC2 staging git logs matche with the pipeline
+  
+  ![gitlog](Screenshots/gitlog_ec2.png)
+
+### github pipeline
+
+   ![gitlog](Screenshots/github_gitpipe_commit.png)
+
 ### 2. Create a Production Release
 
 Go to GitHub → Releases → **Draft a new release**
@@ -91,6 +101,11 @@ Go to GitHub → Releases → **Draft a new release**
 * Click **Publish release**
 
 → Deploys production-ready code from `main` branch to EC2.
+
+  ### EC2 main git logs
+
+   ![gitlog](Screenshots/gitlog_ec2_main.png)
+
 
 ---
 
@@ -102,9 +117,23 @@ Make sure your `app.py` contains:
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
 ```
+## App main page
 
----
+ ![gitlog](Screenshots/app_mai.png)
 
+## App database 
 
+ ![gitlog](Screenshots/ec2_students_db.png)
 
+## Postman data entry
+
+ ![gitlog](Screenshots/postman.png)
+
+## Release Github Pipeline
+
+ ![gitlog](Screenshots/release_pipeline.png)
+
+## Staging Github Pipeline
+
+ ![gitlog](Screenshots/staging_pipeline.png)
 
