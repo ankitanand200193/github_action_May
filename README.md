@@ -85,7 +85,7 @@ git push origin staging
 
 → Automatically runs tests and deploys to EC2 using `staging` branch.
 
-### EC2 staging git logs matche with the pipeline
+### EC2 staging git logs match with the pipeline
   
   ![gitlog](Screenshots/gitlog_ec2.png)
 
@@ -119,7 +119,7 @@ if __name__ == "__main__":
 ```
 ## App main page
 
- ![gitlog](Screenshots/app_mai.png)
+ ![gitlog](Screenshots/app_main.png)
 
 ## App database 
 
