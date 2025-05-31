@@ -30,17 +30,29 @@ jobs:
 
       - name: Run Tests
         run: |
-          pip install pytest
-          pytest test_app.py
-
+            pip install pytest
+            pytest test_app.py
+  
       - name: Deploy to EC2 via SSH
         if: success()
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd /path/to/repo
-            git pull
-            nohup python3 app.py &
+            host: ${{ secrets.EC2_HOST }}
+            username: ${{ secrets.EC2_USER }}
+            key: ${{ secrets.EC2_KEY }}
+            script: |
+              REPO_DIR="/home/ubuntu/my-flask-app"
+              REPO_URL="https://github.com/ankitanand200193/github_action_May.git"
+  
+              if [ -d "$REPO_DIR" ]; then
+                echo "Directory exists. Pulling latest changes..."
+                cd $REPO_DIR
+                git pull
+              else
+                echo "Directory does not exist. Cloning..."
+                git clone $REPO_URL $REPO_DIR
+                cd $REPO_DIR
+              fi
+  
+              echo "Starting Flask app..."
+              nohup python3 app.py &
