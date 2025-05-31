@@ -30,29 +30,41 @@ jobs:
 
       - name: Run Tests
         run: |
-            pip install pytest
-            pytest test_app.py
-  
+          pip install pytest
+          pytest test_app.py
+
       - name: Deploy to EC2 via SSH
         if: success()
         uses: appleboy/ssh-action@v1.0.3
         with:
-            host: ${{ secrets.EC2_HOST }}
-            username: ${{ secrets.EC2_USER }}
-            key: ${{ secrets.EC2_KEY }}
-            script: |
-              REPO_DIR="/home/ubuntu/my-flask-app"
-              REPO_URL="https://github.com/ankitanand200193/github_action_May.git"
-  
-              if [ -d "$REPO_DIR" ]; then
-                echo "Directory exists. Pulling latest changes..."
-                cd $REPO_DIR
-                git pull
-              else
-                echo "Directory does not exist. Cloning..."
-                git clone $REPO_URL $REPO_DIR
-                cd $REPO_DIR
-              fi
-  
-              echo "Starting Flask app..."
-              nohup python3 app.py &
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            # Update and install necessary packages
+            sudo apt update -y
+            sudo apt install -y git python3 python3-pip
+
+            # Set repo variables
+            REPO_DIR="/home/ubuntu/my-flask-app"
+            REPO_URL="https://github.com/yourusername/yourrepo.git"
+
+            # Clone or pull repo
+            if [ -d "$REPO_DIR" ]; then
+              echo "Directory exists. Pulling latest changes..."
+              cd $REPO_DIR
+              git pull
+            else
+              echo "Directory does not exist. Cloning..."
+              git clone $REPO_URL $REPO_DIR
+              cd $REPO_DIR
+            fi
+
+            # Install Python dependencies
+            pip3 install -r requirements.txt
+
+            # Kill existing Flask processes (optional cleanup)
+            pkill -f app.py || true
+
+            # Run the Flask app
+            nohup python3 app.py > flask.log 2>&1 &
