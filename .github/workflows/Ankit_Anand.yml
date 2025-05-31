@@ -68,4 +68,5 @@ jobs:
           
             # Kill old process and start new one in tmux
             tmux kill-session -t flaskapp || true
-            tmux new-session -d -s flaskapp "$VENV_DIR/bin/python app.py"
+            tmux new-session -d -s flaskapp "MONGO_URI=${MONGO_URI} $VENV_DIR/bin/python app.py"
+
